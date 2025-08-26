@@ -1,0 +1,94 @@
+ body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            display: flex;
+            height: 100vh;
+            color: #1e293b;
+        }
+        .left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+        }
+        .left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .left h1 span {
+            color: #0284c7;
+        }
+        .feature-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            margin-top: 15px;
+        }
+        .feature-box svg {
+            margin-right: 12px;
+            color: #0284c7;
+            flex-shrink: 0;
+        }
+        .feature-box strong {
+            display: block;
+            font-weight: 600;
+        }
+        .right {
+            flex: 0 0 820px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            box-shadow: -1px 0 4px rgba(0,0,0,0.05);
+        }
+        .login-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .login-card h2 {
+            margin-bottom: 8px;
+        }
+        .login-card p {
+            margin-bottom: 20px;
+            color: #64748b;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .demo {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .demo strong {
+            font-weight: 600;
+        }

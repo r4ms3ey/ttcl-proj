@@ -64,7 +64,7 @@ project/
 
 2. **Create a database**
    - Import the provided `attendance_db.sql` file into MySQL.
-   - Update `config/db.php` with your DB credentials.
+   - Update `config/Database.php` with your DB credentials.
 
 3. **Run locally**
    - Place the project in your web root (e.g., `htdocs` for XAMPP or `/var/www/html` for Apache).
