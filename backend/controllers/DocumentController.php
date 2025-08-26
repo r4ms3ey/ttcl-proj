@@ -74,3 +74,35 @@ class DocumentController
         return Document::zipDownloads($ids); 
     }
 }
+
+if (isset($_GET['action'])) {
+    header('Content-Type: application/json; charset=utf-8');
+
+    switch ($_GET['action']) {
+        case 'listSubmissions':
+            echo json_encode(DocumentController::listSubmissions());
+            break;
+
+        case 'deleteDocuments':
+            $ids = json_decode(file_get_contents("php://input"), true);
+            echo json_encode(DocumentController::deleteDocuments($ids));
+            break;
+
+        case 'uploadTemplate':
+            if (!empty($_FILES['file']) && isset($_POST['type'])) {
+                echo json_encode(DocumentController::uploadTemplate($_FILES['file'], $_POST['type']));
+            } else {
+                echo json_encode(['error' => 'Missing file or type']);
+            }
+            break;
+
+        case 'setDeadline':
+            $data = json_decode(file_get_contents("php://input"), true);
+            echo json_encode(DocumentController::setDeadline($data['date']));
+            break;
+
+        default:
+            echo json_encode(['error' => 'Invalid action']);
+    }
+    exit;
+}

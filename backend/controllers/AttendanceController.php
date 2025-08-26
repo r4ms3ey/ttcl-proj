@@ -1,8 +1,8 @@
 <?php
-require_once '../models/Attendance.php';
-require_once '../services/GroupService.php';
-require_once '../services/LocationService.php';
-session_start();
+require_once __DIR__ . '/../../backend/models/Attendance.php';
+require_once __DIR__ . '/../services/GroupService.php';
+require_once __DIR__ . '/../services/LocationService.php';
+
 
 class AttendanceController
 {

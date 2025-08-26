@@ -40,4 +40,28 @@ class FieldWorkerController
         $userId = $_SESSION['user_id'];
         return FieldWorker::handleUpload($userId, $file, $type);
     }
+    
+    // NEW: List field workers
+    public static function list($search = '') {
+        return FieldWorker::getAll($search);
+    }
+
+    // NEW: Delete worker by ID
+    public static function delete($id) {
+        return FieldWorker::deleteById($id);
+    }
+}
+
+if (isset($_GET['action'])) {
+    header('Content-Type: application/json');
+    switch ($_GET['action']) {
+        case 'list':
+            $search = $_GET['search'] ?? '';
+            echo json_encode(FieldWorkerController::list($search));
+            break;
+        case 'delete':
+            $id = intval($_GET['id']);
+            echo json_encode(['success' => FieldWorkerController::delete($id)]);
+            break;
+    }
 }

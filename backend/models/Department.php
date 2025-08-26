@@ -1,5 +1,5 @@
 <?php
-require_once '../config/Database.php';
+require_once __DIR__ . '/../../config/Database.php';
 
 class Department
 {
@@ -63,5 +63,17 @@ class Department
         $stmt = $db->prepare("SELECT group_start_date FROM departments WHERE id = ?");
         $stmt->execute([$departmentId]);
         return $stmt->fetchColumn();
+    }
+
+    public static function all() {
+        global $pdo;
+        $stmt = $pdo->query("
+            SELECT d.id, d.name, d.check_in_limit, d.check_out_limit, 
+                   COUNT(w.id) as worker_count
+            FROM departments d
+            LEFT JOIN workers w ON w.department_id = d.id
+            GROUP BY d.id
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

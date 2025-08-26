@@ -96,3 +96,30 @@ class FieldWorker
         return $stmt->execute([$userId, $type, $filename]);
     }
 }
+
+// 7. Get all workers with optional search
+public static function getAll($search = '') {
+    $db = Database::getConnection();
+    $query = "
+        SELECT f.*, d.name AS department_name, u.status
+        FROM field_worker_profiles f
+        JOIN departments d ON f.department_id = d.id
+        JOIN users u ON f.user_id = u.id
+        WHERE f.full_name LIKE ? OR f.email LIKE ? OR d.name LIKE ?
+        ORDER BY f.start_date DESC
+    ";
+    $stmt = $db->prepare($query);
+    $like = "%$search%";
+    $stmt->execute([$like, $like, $like]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// 8. Delete a worker (removes profile + user)
+public static function deleteById($userId) {
+    $db = Database::getConnection();
+    $stmt = $db->prepare("DELETE FROM field_worker_profiles WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $stmt = $db->prepare("DELETE FROM users WHERE id = ?");
+    return $stmt->execute([$userId]);
+}
+

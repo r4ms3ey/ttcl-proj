@@ -1,4 +1,13 @@
-<?php session_start(); ?>
+<?php
+session_start();
+
+$error = '';
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']); // clear it after showing
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entry-Log System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 <body>
@@ -45,30 +54,22 @@
             <h2>Welcome Back</h2>
             <p>Sign in to access your dashboard</p>
             
-            <?php if (!empty($_SESSION['error'])): ?>
+            <?php if ($error): ?>
                 <div style="color:red; margin-bottom:10px;">
-                    <?php 
-                        echo htmlspecialchars($_SESSION['error']);
-                        unset($_SESSION['error']);
-                    ?>
+                    <?php echo htmlspecialchars($error); ?>
                 </div>
             <?php endif; ?>
 
+
             <form method="POST" action="login.php">
                 <div class="form-group">
-                    <input type="text" name="username" placeholder="Enter your username" required>
+                    <input type="text" name="username" placeholder="Enter your username" required  autocomplete="username">
                 </div>
                 <div class="form-group">
-                    <input type="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
                 </div>
                 <button type="submit" class="btn">Sign In</button>
             </form>
-           <!-- <div class="demo">
-                <strong>Demo Credentials:</strong><br>
-                <strong>Admin:</strong> admin / admin123<br>
-                <strong>Field Worker (First Login):</strong> john.doe / ttl1234<br>
-                <strong>Field Worker (Existing):</strong> jane.smith / newpass123
-            </div> -->
         </div>
     </div>
 
