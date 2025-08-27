@@ -10,7 +10,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><span class="circle-icon" title="Select all"><i class="far fa-circle"></i></span></th>
+                    <th><input type="checkbox" class="record-checkbox" id="selectAll"></th>
                     <th>ID</th>
                     <th>Department Name</th>
                     <th>Check-in Limit</th>
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 data.forEach(dept => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td><span class="circle-icon"><i class="far fa-circle"></i></span></td>
+                        <td><input type="checkbox" class="record-checkbox" value="${dept.id}"></td>
                         <td>${dept.id}</td>
                         <td>${dept.name}</td>
                         <td><i class="fas fa-clock"></i> ${dept.check_in_limit}</td>

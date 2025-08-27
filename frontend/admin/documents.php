@@ -25,7 +25,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><span class="circle-icon" title="Select all"><i class="far fa-circle"></i></span></th>
+                    <th><input type="checkbox" class="record-checkbox" id="selectAll"></th>
                     <th>ID</th>
                     <th>Fullname</th>
                     <th>Department</th>
@@ -47,6 +47,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const uploadBtn = document.querySelector(".upload-btn");
     const submissionTableBody = document.getElementById("submission-table-body");
     const searchInput = document.getElementById("search-doc");
+
+
+    // Select all checkboxes
+    document.getElementById("selectAll").addEventListener("change", function() {
+        const checkboxes = document.querySelectorAll(".record-checkbox");
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
 
     // ================= Templates Section =================
     function loadTemplates() {
@@ -132,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
             ).forEach(doc => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td><span class="circle-icon" title="Select row"><i class="far fa-circle"></i></span></td>
+                    <td><input type="checkbox" class="record-checkbox" value="${doc.id}"></td>
                     <td>${submissionTableBody.children.length + 1}</td>
                     <td>${doc.full_name}</td>
                     <td>${doc.department ?? '-'}</td>
@@ -170,7 +177,6 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(res => res.json())
         .then(resp => { if(resp.success) loadSubmissions(searchInput.value); });
     }
-
     // Initial load
     loadTemplates();
     loadSubmissions();

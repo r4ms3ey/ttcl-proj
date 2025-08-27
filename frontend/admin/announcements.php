@@ -23,7 +23,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="selectAll"></th>
+                    <th><input type="checkbox" class="record-checkbox" id="selectAll"></th>
                     <th>ID</th>
                     <th>Department</th>
                     <th>Title</th>
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 data.forEach(item => {
                     let row = `
                         <tr>
-                            <td><input type="checkbox" class="select-row" data-id="${item.id}"></td>
+                            <td><input type="checkbox" class="record-checkbox" data-id="${item.id}"></td>
                             <td>${item.id}</td>
                             <td>${item.department_name}</td>
                             <td>${item.title}</td>
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Select all checkboxes
     document.getElementById("selectAll").addEventListener("change", function() {
-        const checkboxes = document.querySelectorAll(".select-row");
+        const checkboxes = document.querySelectorAll(".record-checkbox");
         checkboxes.forEach(cb => cb.checked = this.checked);
     });
 
