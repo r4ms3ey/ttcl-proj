@@ -1,5 +1,5 @@
 <section class="department-management">
-    <h2>Department Management <i class="fas fa-building"></i></h2>
+    <h2 class="stat-icon-1"><i class="fas fa-building">  Department Management </i></h2>
     <p>Manage departments and their check-in/check-out time limit</p>
     <div class="controls-container">
         <div class="controls">
@@ -29,39 +29,71 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    fetch("controllers/DepartmentController.php?action=view")
-        .then(response => response.json())
-        .then(data => {
-            const tbody = document.getElementById("departments-table-body");
-            const noRecords = document.querySelector(".no-records");
-            tbody.innerHTML = "";
+    loadDepartments();
 
-            if (data.length === 0) {
-                noRecords.style.display = "block";
-                return;
-            }
+    function loadDepartments() {
+        fetch("http://localhost/ttcl_proj/backend/api/department_api.php?action=getAll")
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById("departments-table-body");
+                const noRecords = document.querySelector(".no-records");
+                tbody.innerHTML = "";
 
-            noRecords.style.display = "none";
+                if (data.length === 0) {
+                    noRecords.style.display = "block";
+                    return;
+                }
 
-            data.forEach(dept => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td><span class="circle-icon" title="Select row"><i class="far fa-circle"></i></span></td>
-                    <td>${dept.id}</td>
-                    <td>${dept.name}</td>
-                    <td><i class="fas fa-clock"></i> ${dept.check_in_limit}</td>
-                    <td><i class="fas fa-clock"></i> ${dept.check_out_limit}</td>
-                    <td>${dept.worker_count} workers</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-btn edit" data-id="${dept.id}"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete" data-id="${dept.id}"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+                noRecords.style.display = "none";
+
+                data.forEach(dept => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><span class="circle-icon"><i class="far fa-circle"></i></span></td>
+                        <td>${dept.id}</td>
+                        <td>${dept.name}</td>
+                        <td><i class="fas fa-clock"></i> ${dept.check_in_limit}</td>
+                        <td><i class="fas fa-clock"></i> ${dept.check_out_limit}</td>
+                        <td>${dept.worker_count ?? 0} workers</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn edit" data-id="${dept.id}"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete" data-id="${dept.id}"><i style="color: rgba(122, 0, 0, 1);" class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                
+                document.querySelectorAll(".action-btn.delete").forEach(btn => {
+                    btn.addEventListener("click", function() {
+                        const deptId = this.dataset.id;
+                        if (confirm("Are you sure you want to delete this department?")) {
+                            deleteDepartment(deptId);
+                        }
+                    });
+                });
+            })
+            .catch(err => console.error("Error loading departments:", err));
+    }
+
+    function deleteDepartment(id) {
+        fetch("http://localhost/ttcl_proj/backend/api/department_api.php?action=delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "id=" + encodeURIComponent(id)
         })
-        .catch(err => console.error("Error loading departments:", err));
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert("Department deleted successfully!");
+                loadDepartments(); // Refresh the table
+            } else {
+                alert("Failed to delete department: " + (result.message || "Unknown error"));
+            }
+        })
+        .catch(err => console.error("Delete error:", err));
+    }
 });
 </script>

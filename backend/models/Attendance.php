@@ -48,52 +48,57 @@ class Attendance
     }
 
     
-    // 5. Get all attendance logs (admin use)
-    public static function getAll($search = '', $department = 'all', $date = null) {
-        $db = Database::getConnection();
+// 5. Get all attendance logs (admin use)
+public static function getAll($search = '', $department = 'all', $date = null) {
+    $db = Database::getConnection();
 
-        $query = "SELECT a.id, 
-                        f.full_name, 
-                        d.name AS department, 
-                        DATE(a.checkin_time) AS date, 
-                        a.checkin_time AS check_in, 
-                        a.checkout_time AS check_out,
-                        TIMESTAMPDIFF(HOUR, a.checkin_time, a.checkout_time) AS total_hours,
-                        CASE 
-                            WHEN a.checkin_time IS NULL THEN 'Absent'
-                            WHEN a.checkout_time IS NULL THEN 'Checked In'
-                            ELSE 'Present'
-                        END AS status
-                FROM attendance a
-                JOIN users u ON a.user_id = u.id
-                JOIN field_worker_profiles f ON f.user_id = u.id
-                JOIN departments d ON f.department_id = d.id
-                WHERE 1=1";
+    $query = "SELECT 
+                  a.id,
+                  f.user_id,
+                  f.full_name,
+                  d.name AS department,
+                  DATE(a.checkin_time) AS date,
+                  a.checkin_time AS check_in,
+                  a.checkout_time AS check_out,
+                  TIMESTAMPDIFF(HOUR, a.checkin_time, a.checkout_time) AS total_hours,
+                  CASE
+                      WHEN a.id IS NULL THEN 'Absent'
+                      WHEN a.checkin_time IS NOT NULL AND a.checkout_time IS NULL THEN 'Checked In'
+                      ELSE 'Present'
+                  END AS status
+              FROM field_worker_profiles f
+              LEFT JOIN users u ON u.id = f.user_id
+              LEFT JOIN departments d ON f.department_id = d.id
+              LEFT JOIN attendance a 
+                  ON a.user_id = f.user_id
+                  " . ($date ? "AND DATE(a.checkin_time) = ?" : "");
 
-        $params = [];
+    $params = [];
+    if ($date) {
+        $params[] = $date;
+    }
 
-        if ($search) {
-            $query .= " AND (f.full_name LIKE ? OR d.name LIKE ?)";
-            $params[] = "%$search%";
-            $params[] = "%$search%";
-        }
+    $where = " WHERE 1=1";
 
-        if ($department !== 'all') {
-            $query .= " AND d.name = ?";
-            $params[] = $department;
-        }
+    // Search filter
+    if ($search) {
+        $where .= " AND (f.full_name LIKE ? OR d.name LIKE ?)";
+        $params[] = "%$search%";
+        $params[] = "%$search%";
+    }
 
-        if ($date) {
-            $query .= " AND DATE(a.checkin_time) = ?";
-            $params[] = $date;
-        }
+    // Department filter
+    if ($department !== 'all') {
+        $where .= " AND d.name = ?";
+        $params[] = $department;
+    }
 
-        $query .= " ORDER BY a.checkin_time DESC";
+    $order = " ORDER BY f.full_name ASC, a.checkin_time DESC";
 
-        $stmt = $db->prepare($query);
-        $stmt->execute($params);
+    $stmt = $db->prepare($query . $where . $order);
+    $stmt->execute($params);
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
     // 6. Get attendance by date (admin filter)

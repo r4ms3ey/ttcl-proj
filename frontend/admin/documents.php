@@ -1,96 +1,178 @@
+<!-- Template Management -->
 <section class="template-management">
-    <h2>Template Management <i class="fas fa-file-alt"></i></h2>
-    <p>Manage templates used for attendance, notifications, or other system documents</p>
+    <h2>Template Management <i class="fas fa-file-download"></i></h2>
+    <p>Upload Word document templates and set submission deadlines</p>
+    <div class="template-controls">
+        <button class="upload-btn"><i class="fas fa-upload"></i> Upload Template</button>
+    </div>
+    <div class="template-cards"></div>
+</section>
 
-    <div class="controls-container">
+<!-- Document Submissions -->
+<section class="document-submission">
+    <h2>Document Submission <i class="fas fa-upload"></i></h2>
+    <p>Track and manage submitted documents by users.</p>
+    <div class="submission-controls">
+        <div class="search-bar">
+            <input type="text" id="search-doc" placeholder="Search by ID or name...">
+        </div>
         <div class="controls">
-            <button class="add-btn" id="addTemplateBtn">
-                <i class="fas fa-plus"></i> Add New Template
-            </button>
+            <button class="download-selected-btn"><i class="fas fa-download"></i> Download Selected (0)</button>
+            <button class="delete-selected-btn"><i class="fas fa-trash"></i> Delete Selected (0)</button>
         </div>
     </div>
-
     <div class="table">
         <table>
             <thead>
                 <tr>
                     <th><span class="circle-icon" title="Select all"><i class="far fa-circle"></i></span></th>
                     <th>ID</th>
-                    <th>Template Name</th>
-                    <th>Type</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
+                    <th>Fullname</th>
+                    <th>Department</th>
+                    <th>Certificate</th>
+                    <th>Registration</th>
+                    <th>Status</th>
+                    <th>Submission Date</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="templateTableBody">
-                <!-- Data will be loaded dynamically from backend -->
-            </tbody>
+            <tbody id="submission-table-body"></tbody>
         </table>
-        <p class="no-records" style="display: none;">No templates found for the selected criteria.</p>
     </div>
 </section>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    fetchTemplates();
-});
+    const templateContainer = document.querySelector(".template-cards");
+    const uploadBtn = document.querySelector(".upload-btn");
+    const submissionTableBody = document.getElementById("submission-table-body");
+    const searchInput = document.getElementById("search-doc");
 
-function fetchTemplates() {
-    fetch("controllers/templatecontroller.php?action=view")
-        .then(response => response.json())
+    // ================= Templates Section =================
+    function loadTemplates() {
+        fetch("../../backend/api/admindocument_api.php?action=list")
+        .then(res => res.json())
         .then(data => {
-            const tbody = document.getElementById("templateTableBody");
-            tbody.innerHTML = "";
+            templateContainer.innerHTML = "";
+            if (!data.length) {
+                templateContainer.innerHTML = "<p>No templates found</p>";
+                return;
+            }
+            data.forEach(doc => {
+                const card = document.createElement("div");
+                card.className = "template-card";
+                card.innerHTML = `
+                    <h3>${doc.title}</h3>
+                    <p>${doc.purpose ?? doc.title + '.docx'}</p>
+                    <p>Deadline: ${doc.deadline ?? '-'}</p>
+                    <button class="download-btn" onclick="downloadTemplate('${doc.file_name}')"><i class="fas fa-download"></i> Download</button>
+                    <button class="update-btn" onclick="deleteTemplate(${doc.id})"><i class="fas fa-trash"></i> Delete</button>
+                `;
+                templateContainer.appendChild(card);
+            });
+        });
+    }
 
-            if (data.length === 0) {
-                document.querySelector(".no-records").style.display = "block";
+    /**uploadBtn.addEventListener("click", function() {
+        const inputFile = document.createElement("input");
+        inputFile.type = "file";
+        inputFile.accept = ".doc,.docx";
+        inputFile.onchange = function() {
+            const file = inputFile.files[0];
+            if (!file) return;
+            const title = prompt("Enter template title:", file.name.replace(/\.[^/.]+$/, ""));
+            const deadline = prompt("Enter deadline (YYYY-MM-DD):", "");
+            const purpose = prompt("Purpose (optional):", "");
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("deadline", deadline);
+            formData.append("purpose", purpose);
+            formData.append("file", file);
+
+            fetch("../../backend/api/admindocument_api.php?action=upload", {
+                method: "POST",
+                body: formData
+            }).then(res => res.json())
+            .then(resp => {
+                if (resp.success) {
+                    alert("Template uploaded successfully!");
+                    loadTemplates();
+                } else {
+                    alert("Upload failed: " + (resp.error ?? ""));
+                }
+            });
+        };
+        inputFile.click();
+    });*/
+
+    window.downloadTemplate = function(fileName) {
+        window.location.href = "../../backend/uploads/templates/" + fileName;
+    }
+
+    window.deleteTemplate = function(id) {
+        if (!confirm("Delete this template?")) return;
+        fetch(`../../backend/api/admindocument_api.php?action=delete&id=${id}`)
+        .then(res => res.json())
+        .then(resp => { if(resp.success) loadTemplates(); });
+    }
+
+    // ================= Submissions Section =================
+    function loadSubmissions(query = "") {
+        fetch("../../backend/api/document_api.php?action=list")
+        .then(res => res.json())
+        .then(data => {
+            submissionTableBody.innerHTML = "";
+            if (!data.length) {
+                submissionTableBody.innerHTML = "<tr><td colspan='9'>No submissions found</td></tr>";
                 return;
             }
 
-            document.querySelector(".no-records").style.display = "none";
-
-            data.forEach(template => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
+            data.filter(doc => 
+                String(doc.id).includes(query) || String(doc.user_id).includes(query)
+            ).forEach(doc => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
                     <td><span class="circle-icon" title="Select row"><i class="far fa-circle"></i></span></td>
-                    <td>${template.id}</td>
-                    <td>${template.name}</td>
-                    <td>${template.type}</td>
-                    <td>${template.created_at}</td>
-                    <td>${template.updated_at}</td>
+                    <td>${submissionTableBody.children.length + 1}</td>
+                    <td>${doc.full_name}</td>
+                    <td>${doc.department ?? '-'}</td>
+                    <td>${doc.certificate_status === 'uploaded' ? '<span class="status-data uploaded">Uploaded</span>' : '<span class="status-data missing">Missing</span>'}</td>
+                    <td>${doc.registration_status === 'uploaded' ? '<span class="status-data uploaded">Uploaded</span>' : '<span class="status-data missing">Missing</span>'}</td>
+                    <td>
+                        ${
+                            doc.certificate_status === 'uploaded' && doc.registration_status === 'uploaded'
+                                ? '<span class="status-data uploaded">completed</span>'
+                                : '<span class="status-data missing">missing</span>'
+                        }
+                    </td>
+                    <td>${doc.last_uploaded ?? '-'}</td>
                     <td>
                         <div class="action-buttons">
-                            <button class="action-btn edit" onclick="editTemplate(${template.id})"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete" onclick="deleteTemplate(${template.id})"><i class="fas fa-trash"></i></button>
+                            <button class="action-btn rounded" onclick="downloadSubmission('${doc.file_name}')"><i class="fas fa-download"></i> Download</button>
+                            <button class="action-btn delete rounded" onclick="deleteSubmission(${doc.id})"><i class="fas fa-trash"></i> Delete</button>
                         </div>
                     </td>
                 `;
-                tbody.appendChild(tr);
+                submissionTableBody.appendChild(row);
             });
-        })
-        .catch(err => console.error("Error fetching templates:", err));
-}
+        });
+    }
 
-function editTemplate(id) {
-    alert("Edit template ID: " + id);
-    // You can open a modal or redirect to edit page
-}
+    searchInput.addEventListener("input", () => loadSubmissions(searchInput.value));
 
-function deleteTemplate(id) {
-    if (!confirm("Are you sure you want to delete this template?")) return;
+    window.downloadSubmission = function(fileName) {
+        window.location.href = "../../backend/uploads/" + fileName;
+    }
 
-    fetch("controllers/templatecontroller.php?action=delete&id=" + id, {
-        method: "GET"
-    })
-    .then(response => response.json())
-    .then(res => {
-        if (res.success) {
-            alert("Template deleted successfully!");
-            fetchTemplates();
-        } else {
-            alert("Failed to delete template.");
-        }
-    });
-}
+    window.deleteSubmission = function(document_id) {
+        if (!confirm("Delete this submission?")) return;
+        fetch(`../../backend/api/document_api.php?action=delete&id=${document_id}`)
+        .then(res => res.json())
+        .then(resp => { if(resp.success) loadSubmissions(searchInput.value); });
+    }
+
+    // Initial load
+    loadTemplates();
+    loadSubmissions();
+});
 </script>

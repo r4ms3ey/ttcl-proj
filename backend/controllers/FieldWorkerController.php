@@ -41,12 +41,17 @@ class FieldWorkerController
         return FieldWorker::handleUpload($userId, $file, $type);
     }
     
-    // NEW: List field workers
-    public static function list($search = '') {
-        return FieldWorker::getAll($search);
+    // Return all workers
+    public static function getAll() {
+        return FieldWorker::getAllWorkers();
     }
 
-    // NEW: Delete worker by ID
+    // Return workers filtered by search query
+    public static function search($query) {
+        return FieldWorker::searchWorkers($query);
+    }
+
+    // Delete worker by user_id
     public static function delete($id) {
         return FieldWorker::deleteById($id);
     }
@@ -55,9 +60,12 @@ class FieldWorkerController
 if (isset($_GET['action'])) {
     header('Content-Type: application/json');
     switch ($_GET['action']) {
-        case 'list':
-            $search = $_GET['search'] ?? '';
-            echo json_encode(FieldWorkerController::list($search));
+        case 'getAll':
+            echo json_encode(FieldWorkerController::getAll());
+            break;
+        case 'search':
+            $query = $_GET['q'] ?? '';
+            echo json_encode(FieldWorkerController::search($query));
             break;
         case 'delete':
             $id = intval($_GET['id']);

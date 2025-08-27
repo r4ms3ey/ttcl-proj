@@ -7,7 +7,7 @@
 
 
 body {
-    background-color: #f5f7fa;
+    background-color: #f6faf5;
     padding: 20px;
     color: #333;
 }
@@ -117,7 +117,7 @@ header {
 h2 {
     font-size: 16px;
     margin-bottom: 10px;
-    color: #333;
+    color: #0a0092;
 }
 
 
@@ -370,7 +370,7 @@ p {
 h2 {
     font-size: 16px;
     margin-bottom: 10px;
-    color: #333;
+    color: #0a0092;
 }
 
 
@@ -577,7 +577,7 @@ p {
 h2 {
     font-size: 16px;
     margin-bottom: 10px;
-    color: #333;
+    color: #0a0092;
 }
 
 h2 i {
@@ -701,7 +701,7 @@ p {
 }
 
 .circle-icon:hover {
-    color: #1a73e8;
+    color: #2600ff;
 }
 
 .action-buttons {
@@ -745,13 +745,13 @@ p {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.template-management h2 {
+h2 {
     font-size: 16px;
     margin-bottom: 10px;
-    color: #333;
+    color: #0a0092;
 }
 
-.template-management h2 i {
+h2 i {
     margin-left: 5px;
     font-size: 14px;
 }
@@ -856,13 +856,13 @@ p {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.document-submission h2 {
+h2 {
     font-size: 16px;
     margin-bottom: 10px;
-    color: #333;
+    color: #0a0092;
 }
 
-.document-submission h2 i {
+h2 i {
     margin-left: 5px;
     font-size: 14px;
 }
