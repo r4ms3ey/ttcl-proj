@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const clearBtn = document.createElement("button");
     clearBtn.textContent = "Clear Filters";
     clearBtn.type = "button";
+    clearBtn.className = "add-btn";
     clearBtn.style.marginLeft = "10px";
     clearBtn.addEventListener("click", function () {
         departmentSelect.value = "all";

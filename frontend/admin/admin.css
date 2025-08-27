@@ -17,7 +17,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items:flex-start;
-    background-color: #fff;
+    background-color: #000000;
     padding: 15px 20px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -34,7 +34,7 @@ header {
 .clock-icon {
     font-size: 20px;
     margin-right: 10px;
-    color: #1a73e8;
+    color: #e8d31a;
 }
 
 
@@ -46,14 +46,14 @@ header {
 
 .title-section h1 {
     font-size: 18px;
-    color: #1a73e8;
+    color: #e8d31a;
     margin: 0;
 }
 
 
 .title-section .dashboard-label {
-    font-size: 12px;
-    color: #555;
+    font-size: 15px;
+    color: #ffffff;
     margin-top: 5px;
 }
 
@@ -82,9 +82,9 @@ header {
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 5px 15px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    color: #555;
+    color: #000000;
     display: flex;
     align-items: center;
     gap: 5px;
@@ -94,7 +94,7 @@ header {
 
 .logout-icon {
     font-size: 12px;
-    color: #555;
+    color: #1a1de8;
 }
 
 
@@ -105,8 +105,18 @@ header {
 }
 
 
-.dashboard, .management, .attendance, .announcements-management {
-    background-color: #fff;
+.dashboard {
+    background-color: #16218671;
+    backdrop-filter: blur(30px);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.management, .attendance, .announcements-management, .field-workers, .document-submission, .template-management, .department-management {
+    background-color: #ffffff9f;
+    backdrop-filter: blur(30px);
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -244,7 +254,7 @@ p {
 .tab {
     padding: 8px 15px;
     border: 1px solid #ddd;
-    background: none;
+    background: #ffffff;
     border-radius: 4px;
     cursor: pointer;
     color: #555;
@@ -256,8 +266,8 @@ p {
 
 .tab.active {
     background-color: #e8f0fe;
-    color: #1a73e8;
-    border-color: #1a73e8;
+    color: #005fdb;
+    border-color: #005fdb;
 }
 
 
@@ -357,16 +367,6 @@ p {
 }
 
 /* Filed Workers Management */
-
-.field-workers {
-    background-color: #fff;
-     padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-
 h2 {
     font-size: 16px;
     margin-bottom: 10px;
@@ -566,15 +566,7 @@ p {
 
 /* Department Management */
 
-.department-management {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
+ h2 {
     font-size: 16px;
     margin-bottom: 10px;
     color: #0a0092;
@@ -737,14 +729,6 @@ p {
 
 
 /* Template Management Styles */
-.template-management {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 h2 {
     font-size: 16px;
     margin-bottom: 10px;
@@ -848,14 +832,6 @@ h2 i {
 }
 
 /* Document Submission Styles */
-.document-submission {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 h2 {
     font-size: 16px;
     margin-bottom: 10px;

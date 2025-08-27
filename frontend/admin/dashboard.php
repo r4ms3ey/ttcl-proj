@@ -87,11 +87,11 @@ $pendingDocs = $conn->query("
                 <?php
                 $hour = (int)date('H');
                 if ($hour < 12) {
-                    $greeting = "Good morning";
+                    $greeting = "Good morning🌄";
                 } elseif ($hour < 18) {
-                    $greeting = "Good afternoon";
+                    $greeting = "Good afternoon🌞";
                 } else {
-                    $greeting = "Good evening";
+                    $greeting = "Good evening🌜";
                 }
                 ?>
                 <span class="glow-greeting"><?php echo $greeting; ?>, Administrator</span>

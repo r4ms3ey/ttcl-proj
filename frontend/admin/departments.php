@@ -52,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td><input type="checkbox" class="record-checkbox" value="${dept.id}"></td>
                         <td>${dept.id}</td>
                         <td>${dept.name}</td>
-                        <td><i class="fas fa-clock"></i> ${dept.check_in_limit}</td>
-                        <td><i class="fas fa-clock"></i> ${dept.check_out_limit}</td>
+                        <td>🕝 ${dept.check_in_limit}</td>
+                        <td>🕝 ${dept.check_out_limit}</td>
                         <td>${dept.worker_count ?? 0} workers</td>
                         <td>
                             <div class="action-buttons">
